@@ -1,0 +1,92 @@
+ou'll need to make tasks, code of every task must be uploaded to separate branch in private repository in github (preferred)
+or any other, submit avery task as merge request/pull request. Don't use external libraries (if something else not specified).
+Build system - cmake.
+Additional files: https://drive.google.com/drive/folders/1_4O6m54hghNsXVJQs8KzJ7bW2ge_YWHQ?usp=sharing
+Git with UI: SourceTree (Windows), Sublime Merge (Linux)
+
+
+Task 1:
+Write a console application that accepts 2 strings as an input from user (text for anagram and text with filtering symbols).
+If text with filtering symbols is empty, than ignored symbols are digits and non alphabetic symbols.
+Program should reverse every word of input text and show result in console.
+Symbol in word, which is contained in filter, must stay on original position.
+Example:
+    User didn't enter any text in filter
+    Input: “abcd efgh” -> Output: “dcba hgfe”
+    Input: “a1bcd efg!h” -> Output: “d1cba hgf!e”
+
+User typed "ab" in filter
+    Input: “abcd efgh” -> Output: “abdc hgfe”
+    Input: “a1bcd efglh” -> Output: “adbc1 hgfle”
+
+
+Task 2:
+Write a program, which receives a path to file as parameters and checks if this file is Zip-jpeg (image with archive in the end).
+Program must print a list of files contained in archive. Example files see in google drive.
+Doc for zip: https://users.cs.jmu.edu/buchhofp/forensics/formats/pkzip.html
+
+Task 3:
+Write a program, which receives a path to file, encoding and path to result file as parameters and converts it to utf-8.
+Text files see in google drive. Supported encodings:
+http://www.ascii.ca/cp862.htm
+http://www.ascii.ca/cp1255.htm
+http://www.ascii.ca/iso8859.8.htm
+
+Task 4:
+Write a program, which receives a path to text file and counts word frequency. Try to write a hash map for this.
+Explanation about hash table: https://www.youtube.com/watch?v=2Ti5yvumFTU
+
+Task 5:
+Write a program, which receives a name of city and prints a wheater forecast for this city.
+Progrram must to access external api using libcurl and parse a response (you can use any json-parser library).
+
+Task 6:
+Write a static libray for logging. It must print to file messages with specified level (debug, info, warning, error) and place in code (where a logging called from).
+Print stack trace for errors.
+
+Task 7:
+Fix memory leaks in program (In google drive).
+How to launch (in directory with extracted archive):
+cd test/package
+make valgrind
+
+Task 8:
+Write a daemon, which shows a size of specified file (via config in /etc).
+Damon must work via UNIX sockets (local sockets), with daemonisation and without it.
+Use file lock to avoid work of additional instances of daemon
+
+Task 9:
+Write a program, which calculates CRC32 (https://en.wikipedia.org/wiki/Cyclic_redundancy_check#CRC-32_algorithm) of big files.
+It receives a path to file via parameters
+
+Task 10:
+Write a program, which receives an amount of threads and path to directory with logs (format - combined, see https://httpd.apache.org/docs/2.4/logs.html#combined).
+Program must calculate a statistics: total bytes sent, 10 heaviest URLs, 10 most frequent URLs and 10 most frequent referes
+
+Task 11:
+Write a program, which connects to telnet service https://telehack.com and sends a command figlet (with requred parameters)
+ 
+Task 12:
+Write a program, which receives a words and prints letter frequency in words. Make such program with cache and without it.
+Try write a unit test, which test your program using Cmoka and googletest (optional)
+Example: https://github.com/PacktPublishing/Extreme-C/tree/master/ch22-unit-testing-and-debugging
+
+Task 13:
+Write a program, which parses a results of racing in 2018 and prints sorted results (from fastest to slowest) in format:
+position  Racer's name | command | timing
+First 15 racers pass to next race
+
+Task 14:
+Write a program, which requests from user two numbers and prints a division process like:
+_1|3
+ 0|-
+ -|0
+ 1
+
+_80|2
+ 8 |--
+ - |40
+_00
+  0
+ --
+  0
