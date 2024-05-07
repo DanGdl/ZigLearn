@@ -1,7 +1,7 @@
 ZIG LANG
 
 Home page: `https://ziglang.org/`
-Create a project: `zig init-exe` or `zig init-lib`
+Create a project: `zig init`
 Info about build system: `zig build --help`
 
 Build and run: `zig run src/main.zig`
