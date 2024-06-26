@@ -2,6 +2,7 @@ const std = @import("std");
 const ascii = @import("std").ascii;
 const unicode = @import("std").unicode;
 const Allocator = std.mem.Allocator;
+const Reader = std.io.AnyReader;
 const Utf8View = unicode.Utf8View;
 
 pub fn main() !void {
@@ -10,7 +11,7 @@ pub fn main() !void {
     const stdout = bw.writer();
     const stdin_file = std.io.getStdIn().reader();
     var br = std.io.bufferedReader(stdin_file);
-    const stdin = br.reader();
+    const stdin = br.reader().any();
 
     const allocator = std.heap.page_allocator;
 
@@ -29,46 +30,18 @@ pub fn main() !void {
         try stdout.print("Enter a text for anagram:\n", .{});
         try bw.flush();
 
-        var counter: usize = 0;
-        input[0] = 0;
-        while (true) {
-            const symbol = stdin.readByte() catch |err| {
-                std.log.err("Failed to read byte: {}\n", .{err});
-                return;
-            };
-            if ('\n' == symbol) {
-                break;
-            } else if (counter >= input.len) {
-                input = allocator.realloc(input, counter + 1) catch |err| {
-                    std.log.err("Failed to reallocate buffer: {}\n", .{err});
-                    return;
-                };
-            }
-            input[counter] = symbol;
-            counter += 1;
-        }
+        readLine(stdin, allocator, &input) catch |err| {
+            std.log.err("Failed to read line: {}\n", .{err});
+            return;
+        };
 
         try stdout.print("Enter a text for filter:\n", .{});
         try bw.flush();
 
-        counter = 0;
-        filter[0] = 0;
-        while (true) {
-            const symbol = stdin.readByte() catch |err| {
-                std.log.err("Failed to read byte for filter: {}\n", .{err});
-                return;
-            };
-            if ('\n' == symbol) {
-                break;
-            } else if (counter >= filter.len) {
-                filter = allocator.realloc(filter, counter + 1) catch |err| {
-                    std.log.err("Failed to reallocate buffer for filter: {}\n", .{err});
-                    return;
-                };
-            }
-            filter[counter] = symbol;
-            counter += 1;
-        }
+        readLine(stdin, allocator, &filter) catch |err| {
+            std.log.err("Failed to read line for filter: {}\n", .{err});
+            return;
+        };
 
         if (Utf8View.init(filter)) |filter_utf| {
             makeAnagram(input, filter_utf);
@@ -78,28 +51,29 @@ pub fn main() !void {
             std.log.err("Failed to convert input to UTF-8: {}\n", .{err});
         }
 
-        counter = 0;
-        while (true) {
-            const symbol = stdin.readByte() catch |err| {
-                std.log.err("Failed to read byte for ans: {}\n", .{err});
-                return;
-            };
-            if ('\n' == symbol) {
-                break;
-            } else if (counter >= filter.len) {
-                filter = allocator.realloc(filter, counter + 1) catch |err| {
-                    std.log.err("Failed to reallocate buffer for ans: {}\n", .{err});
-                    return;
-                };
-            }
-            filter[counter] = symbol;
-            counter += 1;
-        }
-
+        readLine(stdin, allocator, &filter) catch |err| {
+            std.log.err("Failed to read line for answer: {}\n", .{err});
+            return;
+        };
         if (filter[0] == 'q' or filter[0] == 'Q') {
             try bw.flush();
             break;
         }
+    }
+}
+
+fn readLine(f_source: std.io.AnyReader, allocator: std.mem.Allocator, input: *[]u8) !void {
+    var counter: usize = 0;
+    input.*[0] = 0;
+    while (true) {
+        const symbol = try f_source.readByte();
+        if ('\n' == symbol) {
+            break;
+        } else if (counter >= input.len) {
+            input.* = try allocator.realloc(input.*, counter + 1);
+        }
+        input.*[counter] = symbol;
+        counter += 1;
     }
 }
 
