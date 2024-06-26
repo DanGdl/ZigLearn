@@ -185,8 +185,8 @@ fn reverseWord(input: []u8, filter: Utf8View) void {
                 idx_from_s = start;
                 idx_tmp_into_s = start;
             }
-            std.mem.copy(u8, &buff_tmp, input[idx_tmp_from_s..(idx_tmp_from_s + size_tmp_symbol)]);
-            std.mem.copy(u8, input[idx_into_s..(idx_into_s + size_symbol)], input[idx_from_s..(idx_from_s + size_symbol)]);
+            @memcpy(buff_tmp[0..size_tmp_symbol], input[idx_tmp_from_s..(idx_tmp_from_s + size_tmp_symbol)]);
+            std.mem.copyForwards(u8, input[idx_into_s..(idx_into_s + size_symbol)], input[idx_from_s..(idx_from_s + size_symbol)]);
             if (len_start != len_end) {
                 while (idx_start != idx_end) {
                     var next: usize = 0;
@@ -199,7 +199,7 @@ fn reverseWord(input: []u8, filter: Utf8View) void {
                     idx_start = next;
                 }
             }
-            std.mem.copy(u8, input[idx_tmp_into_s..(idx_tmp_into_s + size_tmp_symbol)], buff_tmp[0..size_tmp_symbol]);
+            @memcpy(input[idx_tmp_into_s..(idx_tmp_into_s + size_tmp_symbol)], buff_tmp[0..size_tmp_symbol]);
             start += len_end;
             end -= len_start;
         }
@@ -231,8 +231,8 @@ test "test_UTF8_diff_size" {
 
     var input: [in.len:0]u8 = undefined;
     var exp: [ex.len:0]u8 = undefined;
-    std.mem.copy(u8, &input, in);
-    std.mem.copy(u8, &exp, ex);
+    @memcpy(&input, in);
+    @memcpy(&exp, ex);
     makeAnagram(&input, filter);
     try std.testing.expectEqual(exp, input);
 }
@@ -244,8 +244,8 @@ test "test_ASCII_no_filter" {
 
     var input: [in.len:0]u8 = undefined;
     var exp: [ex.len:0]u8 = undefined;
-    std.mem.copy(u8, &input, in);
-    std.mem.copy(u8, &exp, ex);
+    @memcpy(&input, in);
+    @memcpy(&exp, ex);
     makeAnagram(&input, filter);
     try std.testing.expectEqual(exp, input);
 }
@@ -257,8 +257,8 @@ test "test_ASCII_filter" {
 
     var input: [in.len:0]u8 = undefined;
     var exp: [ex.len:0]u8 = undefined;
-    std.mem.copy(u8, &input, in);
-    std.mem.copy(u8, &exp, ex);
+    @memcpy(&input, in);
+    @memcpy(&exp, ex);
     makeAnagram(&input, filter);
     try std.testing.expectEqual(exp, input);
 }
@@ -270,8 +270,8 @@ test "test_UTF8_no_filter" {
 
     var input: [in.len:0]u8 = undefined;
     var exp: [ex.len:0]u8 = undefined;
-    std.mem.copy(u8, &input, in);
-    std.mem.copy(u8, &exp, ex);
+    @memcpy(&input, in);
+    @memcpy(&exp, ex);
     makeAnagram(&input, filter);
     try std.testing.expectEqual(exp, input);
 }
@@ -283,8 +283,8 @@ test "test_UTF8_filter" {
 
     var input: [in.len:0]u8 = undefined;
     var exp: [ex.len:0]u8 = undefined;
-    std.mem.copy(u8, &input, in);
-    std.mem.copy(u8, &exp, ex);
+    @memcpy(&input, in);
+    @memcpy(&exp, ex);
     makeAnagram(&input, filter);
     try std.testing.expectEqual(exp, input);
 }
@@ -296,8 +296,8 @@ test "test_empty" {
 
     var input: [in.len:0]u8 = undefined;
     var exp: [ex.len:0]u8 = undefined;
-    std.mem.copy(u8, &input, in);
-    std.mem.copy(u8, &exp, ex);
+    @memcpy(&input, in);
+    @memcpy(&exp, ex);
     makeAnagram(&input, filter);
     try std.testing.expectEqual(exp, input);
 }
